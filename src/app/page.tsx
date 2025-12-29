@@ -8,10 +8,6 @@ import ShopGrid from '@/components/ShopGrid';
 export default function Home() {
   return (
     <>
-      <div className="bg-red-500 text-black text-4xl p-10 font-bold z-[99999] relative text-center">
-        IF YOU CAN SEE THIS, THE DEPLOY WORKED
-      </div>
-      
       <Hero /> 
       <Marquee />
       <DropSection />
