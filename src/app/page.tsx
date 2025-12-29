@@ -4,7 +4,6 @@ import Marquee from '@/components/Marquee';
 import DropSection from '@/components/DropSection';
 import OriginStory from '@/components/OriginStory';
 import ShopGrid from '@/components/ShopGrid';
-import Architects from '@/components/Architects';
 
 export default function Home() {
   return (
