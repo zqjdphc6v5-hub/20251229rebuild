@@ -8,6 +8,8 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      // Use requestAnimationFrame for smoother performance if possible, 
+      // but direct state update is fine for simple cursors.
       setPosition({ x: e.clientX, y: e.clientY });
       
       const target = e.target as HTMLElement;
@@ -19,6 +21,7 @@ export default function CustomCursor() {
         target.closest('a') !== null
       );
     };
+    
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -32,8 +35,13 @@ export default function CustomCursor() {
         }
       `}</style>
       <div 
-        className={`hidden md:flex fixed top-0 left-0 pointer-events-none z-[100] mix-blend-difference transition-transform duration-100 ease-out items-center justify-center ${isPointer ? 'scale-150' : 'scale-100'}`}
-        style={{ transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)` }}
+        // CHANGED: z-[100] -> z-[9999] to ensure it sits above sticky headers and content layers
+        className={`hidden md:flex fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference transition-transform duration-100 ease-out items-center justify-center ${isPointer ? 'scale-150' : 'scale-100'}`}
+        style={{ 
+          transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)`,
+          // Ensure hardware acceleration to prevent flickering on scroll
+          willChange: 'transform' 
+        }}
       >
         <div className={`w-3 h-3 bg-[#ff00ff] ${isPointer ? 'opacity-100' : 'opacity-70'}`} />
         <div className="absolute w-8 h-[1px] bg-[#ff00ff]" />
