@@ -8,9 +8,9 @@ import ShopGrid from '@/components/ShopGrid';
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Marquee />
+      <Hero /> 
       <DropSection />
+      <Marquee />
       <OriginStory />
       <ShopGrid />
     </>
