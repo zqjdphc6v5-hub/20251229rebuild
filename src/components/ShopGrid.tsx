@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { Plus, AlertCircle } from 'lucide-react';
 import Reveal from './ui/Reveal';
 
-const SHOPIFY_DOMAIN = "your-shop-name.myshopify.com"; 
-const SHOPIFY_STOREFRONT_ACCESS_TOKEN = "your-public-storefront-access-token";
+const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || "";
+const SHOPIFY_STOREFRONT_ACCESS_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || "";
+
+// Keep your MOCK_PRODUCTS below these...
 
 const MOCK_PRODUCTS = [
   { id: '1', title: 'Oversized Acid Wash Tee', handle: 'oversized-acid-tee', price: '45.00', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1000&auto=format&fit=crop' },
@@ -198,17 +200,20 @@ export default function ShopGrid() {
         </div>
         
         <Reveal delay={200}>
-          <div className="mt-24 text-center border-t border-neutral-900 pt-12">
-            <p className="font-mono text-xs text-neutral-600 mb-4">
-              // END OF COLLECTION
-            </p>
-            <button 
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-sm font-bold tracking-widest uppercase border-b border-white pb-1 hover:text-[#ff00ff] hover:border-[#ff00ff] transition-colors"
-            >
-                Back to Top
-            </button>
-          </div>
+      <div className="mt-24 text-center border-t border-neutral-900 pt-12">
+  <p className="font-mono text-xs text-neutral-600 mb-4">
+    // END OF COLLECTION
+  </p>
+  {/* We keep Reveal for the fade-in, but force the transform to 'none' once visible */}
+  <Reveal className="!transform-none"> 
+    <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="relative inline-block text-sm font-bold tracking-widest uppercase border-b border-white pb-1 hover:text-[#ff00ff] hover:border-[#ff00ff] transition-colors duration-300"
+    >
+        Back to Top
+    </button>
+  </Reveal>
+</div>
         </Reveal>
       </div>
     </section>
