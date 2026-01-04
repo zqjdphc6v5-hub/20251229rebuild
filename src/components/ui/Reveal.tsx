@@ -33,10 +33,13 @@ export default function Reveal({ children, className = "", delay = 0 }: RevealPr
       ref={ref}
       className={`transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] transform ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-      } ${className}`}
+      } ${className} pointer-events-none`} // This makes the cursor ignore the container shift
       style={{ transitionDelay: `${delay}ms` }}
     >
-      {children}
+      {/* This inner div restores clicking for the actual content */}
+      <div className="pointer-events-auto">
+        {children}
+      </div>
     </div>
   );
 }

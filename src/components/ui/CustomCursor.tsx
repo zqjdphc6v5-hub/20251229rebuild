@@ -8,11 +8,13 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Use requestAnimationFrame for smoother performance if possible, 
-      // but direct state update is fine for simple cursors.
+      // Direct viewport coordinates to prevent drift from transformed parents
       setPosition({ x: e.clientX, y: e.clientY });
       
       const target = e.target as HTMLElement;
+      if (!target) return;
+
+      // Check if the current element should trigger the pointer state
       setIsPointer(
         window.getComputedStyle(target).cursor === 'pointer' ||
         target.tagName === 'BUTTON' ||
@@ -22,7 +24,8 @@ export default function CustomCursor() {
       );
     };
     
-    window.addEventListener('mousemove', handleMouseMove);
+    // Add listener to window to ensure tracking even when mouse is over animated divs
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
@@ -30,22 +33,33 @@ export default function CustomCursor() {
     <>
       <style>{`
         @media (min-width: 768px) {
-          body { cursor: none; }
-          a, button { cursor: none; }
+          body, a, button, * { 
+            cursor: none !important; 
+          }
         }
       `}</style>
+      
       <div 
-        // CHANGED: z-[100] -> z-[9999] to ensure it sits above sticky headers and content layers
-        className={`hidden md:flex fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference transition-transform duration-100 ease-out items-center justify-center ${isPointer ? 'scale-150' : 'scale-100'}`}
+        className={`hidden md:flex fixed top-0 left-0 pointer-events-none z-[99999] mix-blend-difference transition-transform duration-200 ease-out items-center justify-center`}
         style={{ 
-          transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)`,
-          // Ensure hardware acceleration to prevent flickering on scroll
+          // translate3d forces GPU acceleration and fixes the "sliding" bug on animated buttons
+          transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%) ${isPointer ? 'scale(1.5)' : 'scale(1)'}`,
           willChange: 'transform' 
         }}
       >
-        <div className={`w-3 h-3 bg-[#ff00ff] ${isPointer ? 'opacity-100' : 'opacity-70'}`} />
+        {/* Central Dot */}
+        <div className={`w-3 h-3 bg-[#ff00ff] transition-opacity duration-300 ${isPointer ? 'opacity-100' : 'opacity-70'}`} />
+        
+        {/* Crosshair - Horizontal */}
         <div className="absolute w-8 h-[1px] bg-[#ff00ff]" />
+        
+        {/* Crosshair - Vertical */}
         <div className="absolute h-8 w-[1px] bg-[#ff00ff]" />
+        
+        {/* Subtle Glitch Ring - Only shows on pointer */}
+        {isPointer && (
+          <div className="absolute w-10 h-10 border border-[#ff00ff] opacity-30 animate-ping" />
+        )}
       </div>
     </>
   );

@@ -2,17 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import Marquee from '@/components/Marquee'; // Mapping "Scroller" to Marquee.tsx
-import TheDrop from '@/components/DropSection'; // Mapping "TheDrop" to DropSection.tsx
-import ShopGrid from '@/components/ShopGrid';
-import Architects from '@/components/Architects';
+import OriginStory from '@/components/OriginStory';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/ui/CustomCursor';
 import CartDrawer from '@/components/CartDrawer';
 import { CartProvider } from '@/context/CartContext';
+import Reveal from '@/components/ui/Reveal';
 
-export default function Home() {
+export default function AboutPage() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -27,17 +24,19 @@ export default function Home() {
         <Navbar />
         <CartDrawer />
         
-        <Hero />
-        
-        <div className="relative z-10 bg-black">
-          {/* Using Marquee as the scrolling banner */}
-          <Marquee /> 
+        <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+          <Reveal>
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-12 text-[#ff00ff]">
+              MANIFESTO_
+            </h1>
+          </Reveal>
           
-          <TheDrop />
-          <ShopGrid />
-          <Architects />
-          <Footer />
+          {/* The Component from your file list */}
+          <OriginStory />
+          
         </div>
+
+        <Footer />
       </main>
     </CartProvider>
   );
