@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, AlertCircle } from 'lucide-react';
-import Link from 'next/link'; // <--- ADDED IMPORT
+import Link from 'next/link';
 import Reveal from './ui/Reveal';
 import { useCart } from '@/context/CartContext';
 
@@ -79,7 +79,12 @@ const ProductCard = ({ product }: { product: Product }) => {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]?.node);
 
   const image = product.images?.edges?.[0]?.node || { url: product.img, altText: product.title };
-  const priceDisplay = product.priceRange?.minVariantPrice || { amount: product.price, currencyCode: 'USD' };
+  
+  // FIX 1: Ensure safe fallback so 'amount' is never undefined
+  const priceDisplay = product.priceRange?.minVariantPrice || { 
+    amount: product.price || '0', 
+    currencyCode: 'USD' 
+  };
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -111,7 +116,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 
       <div className="absolute top-0 left-0 w-full h-[2px] bg-[#ff00ff] z-20 opacity-0 group-hover:opacity-100 animate-scanline" />
       
-      {/* UPDATED: WRAPPED IMAGE IN LINK */}
       <Link 
         href={`/products/${product.handle}`}
         className="block w-full h-[350px] md:h-[380px] bg-neutral-900 relative flex items-center justify-center overflow-hidden cursor-none"
@@ -128,7 +132,6 @@ const ProductCard = ({ product }: { product: Product }) => {
       </Link>
 
       <div className="space-y-1 mt-4">
-        {/* UPDATED: WRAPPED TITLE IN LINK */}
         <Link href={`/products/${product.handle}`} className="cursor-none">
           <h3 className="text-lg md:text-xl font-black uppercase leading-tight line-clamp-1 hover:text-[#ff00ff] transition-colors">
             {product.title}
@@ -139,8 +142,9 @@ const ProductCard = ({ product }: { product: Product }) => {
           {subheaderText}
         </p>
         
+        {/* FIX 2: Used 'en-AU' instead of undefined for explicit locale */}
         <p className="font-mono text-sm font-bold text-[#ff00ff] mt-1">
-          {parseFloat(priceDisplay.amount).toLocaleString(undefined, { style: 'currency', currency: priceDisplay.currencyCode || 'USD' })}
+          {parseFloat(priceDisplay.amount).toLocaleString('en-AU', { style: 'currency', currency: priceDisplay.currencyCode || 'USD' })}
         </p>
       </div>
 
@@ -239,8 +243,7 @@ export default function ShopGrid() {
       `;
 
       try {
-      // UPDATED: Use 2025-01
-const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2025-01/graphql.json`, {
+        const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2025-01/graphql.json`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -265,7 +268,7 @@ const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2025-01/graphql.json
   }, []);
 
   return (
-    <section className="bg-black text-white min-h-screen py-20 px-6">
+    <section id="shop" className="bg-black text-white min-h-screen py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 border-b border-neutral-800 pb-8">
           <Reveal>
