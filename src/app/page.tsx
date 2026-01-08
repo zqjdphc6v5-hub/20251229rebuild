@@ -3,11 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Marquee from '@/components/Marquee'; // Mapping "Scroller" to Marquee.tsx
-import TheDrop from '@/components/DropSection'; // Mapping "TheDrop" to DropSection.tsx
+import Marquee from '@/components/Marquee'; 
+import TheDrop from '@/components/DropSection'; 
 import ShopGrid from '@/components/ShopGrid';
-import Architects from '@/components/Architects';
-import Footer from '@/components/Footer';
+import OriginStory from '@/components/OriginStory'; 
 import CustomCursor from '@/components/ui/CustomCursor';
 import CartDrawer from '@/components/CartDrawer';
 import { CartProvider } from '@/context/CartContext';
@@ -30,13 +29,15 @@ export default function Home() {
         <Hero />
         
         <div className="relative z-10 bg-black">
-          {/* Using Marquee as the scrolling banner */}
           <Marquee /> 
           
           <TheDrop />
+          
           <ShopGrid />
-          <Architects />
-          <Footer />
+          
+          {/* This is now the ONLY section at the bottom */}
+          <OriginStory />
+          
         </div>
       </main>
     </CartProvider>

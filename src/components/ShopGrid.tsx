@@ -80,7 +80,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   const image = product.images?.edges?.[0]?.node || { url: product.img, altText: product.title };
   
-  // FIX 1: Ensure safe fallback so 'amount' is never undefined
   const priceDisplay = product.priceRange?.minVariantPrice || { 
     amount: product.price || '0', 
     currencyCode: 'USD' 
@@ -142,7 +141,6 @@ const ProductCard = ({ product }: { product: Product }) => {
           {subheaderText}
         </p>
         
-        {/* FIX 2: Used 'en-AU' instead of undefined for explicit locale */}
         <p className="font-mono text-sm font-bold text-[#ff00ff] mt-1">
           {parseFloat(priceDisplay.amount).toLocaleString('en-AU', { style: 'currency', currency: priceDisplay.currencyCode || 'USD' })}
         </p>
@@ -197,7 +195,7 @@ export default function ShopGrid() {
         return;
       }
 
-      // The Updated Query with Metafields
+      // Query
       const query = `
         {
           products(first: 12) {
@@ -270,7 +268,8 @@ export default function ShopGrid() {
   return (
     <section id="shop" className="bg-black text-white min-h-screen py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 border-b border-neutral-800 pb-8">
+        {/* FIXED: Removed border-b from here to avoid double-line with Drop section */}
+        <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 pb-8">
           <Reveal>
             <h2 className="text-5xl md:text-7xl font-black tracking-tighter">COLLECTION 01</h2>
             <span className="font-mono text-neutral-500 mt-4 md:mt-0">[ {products.length} ITEMS / READY TO SHIP ]</span>
@@ -298,7 +297,8 @@ export default function ShopGrid() {
           )}
         </div>
         
-        <div className="mt-24 text-center border-t border-neutral-900 pt-12">
+        {/* FIXED: Removed border-t from here to avoid double-line with Origin section */}
+        <div className="mt-24 text-center pt-12">
           <p className="font-mono text-xs text-neutral-600 mb-4">// END OF COLLECTION</p>
           <Reveal className="!transform-none"> 
             <button 

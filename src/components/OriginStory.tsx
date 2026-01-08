@@ -2,54 +2,39 @@
 
 import React from 'react';
 import Reveal from './ui/Reveal';
+import ArchitectCard from './Architects';
 
-// 1. Define the Assets locally to avoid "ASSETS not found" errors
 const ASSETS = {
-  kai: "https://images.unsplash.com/photo-1542206395-9feb3edaa68d?q=80&w=1000&auto=format&fit=crop",
-  ryder: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop"
+  kai: "https://modulate.com.au/URBNimages/Gemini_Generated_Image_ma9h0pma9h0pma9h.png",
+  june: "https://modulate.com.au/URBNimages/Gemini_Generated_Image_qqcs4lqqcs4lqqcs.png",
 };
-
-// 2. Define the Interface (This fixes the "IntrinsicAttributes" error)
-interface ArchitectCardProps {
-  name: string;
-  role: string;
-  bio: string;
-  img: string;
-  delay?: number;
-}
-
-// 3. Define the Card Component with the correct Props
-const ArchitectCard = ({ name, role, bio, img, delay = 0 }: ArchitectCardProps) => (
-  <Reveal delay={delay}>
-    <div className="group border border-neutral-800 bg-neutral-900/30 p-6 hover:border-[#ff00ff] transition-all duration-500 h-full">
-      <div className="h-[400px] mb-6 overflow-hidden bg-neutral-900 relative">
-        <img 
-          src={img} 
-          alt={name}
-          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-black/20 bg-[linear-gradient(transparent_2px,rgba(0,0,0,0.3)_2px)] bg-[length:4px_4px] pointer-events-none" />
-      </div>
-      
-      <div className="flex justify-between items-end border-b border-neutral-800 pb-4 mb-4 group-hover:border-[#ff00ff] transition-colors">
-        <h3 className="text-2xl font-black uppercase tracking-tighter">{name}</h3>
-        <span className="font-mono text-xs text-[#ff00ff] tracking-widest bg-[#ff00ff]/10 px-2 py-1 rounded">
-          {role}
-        </span>
-      </div>
-      
-      <p className="font-mono text-sm text-neutral-400 leading-relaxed">
-        // {bio}
-      </p>
-    </div>
-  </Reveal>
-);
 
 export default function OriginStory() {
   return (
-    <section className="py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
+    <section className="bg-black text-white border-b border-neutral-800">
+      {/* FIXED: Removed border-b from this inner div to stop the double-line glitch */}
+      <div className="px-6 py-20 md:px-12 md:py-24 max-w-7xl mx-auto">
+        <Reveal>
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 text-neutral-100">THE ORIGIN</h2>
+        </Reveal>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="md:col-span-8">
+            <Reveal delay={200}>
+              <p className="text-lg md:text-2xl text-neutral-400 leading-relaxed font-light">
+                <span className="text-white font-bold">URBNWAVE</span> wasn't founded in a boardroom. It was found in the margins. It exists in the space between the structure of the city and the chaos of living in it. It is the collision of two distinct obsessions.
+              </p>
+            </Reveal>
+          </div>
+          <div className="md:col-span-4 flex items-end justify-end">
+            <Reveal delay={400} className="w-full">
+              <div className="h-[2px] w-full bg-neutral-800"></div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+
+      {/* The Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2">
         <ArchitectCard 
           name="KAI" 
           role="The Observer // Structure / Photo" 
@@ -57,15 +42,13 @@ export default function OriginStory() {
           img={ASSETS.kai}
           delay={0}
         />
-        
         <ArchitectCard 
-          name="RYDER" 
-          role="The Ghost // Code / Logic" 
-          bio="Ryder exists in the wires. While Kai documents the physical world, Ryder dismantles the digital one. He sees the matrix behind the storefronts—the flow of data, the commerce, the hidden systems. He builds the framework that holds UrbnWave together. He speaks in React and Python, preferring the clean logic of code to the messiness of conversation. He ensures the signal never drops."
-          img={ASSETS.ryder}
+          name="JUNE" 
+          role="The Breaker // Chaos / Sketch" 
+          bio="If Kai builds the structure, June tears it down. She lives in the transient spaces—train stations, 24-hour food courts, the back of the bus. She believes in Wabi-Sabi: the idea that nothing is perfect, and nothing is finished until it’s been wrecked a little. June takes Kai’s pristine photographs and destroys them. Using a handheld scanner and a battered notebook thick with sketches, she glitches, crops, and distorts the reality. She adds the noise. She breaks the image just enough to make it feel like a memory."
+          img={ASSETS.june}
           delay={200}
         />
-        
       </div>
     </section>
   );

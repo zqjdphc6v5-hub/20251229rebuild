@@ -1,71 +1,49 @@
 "use client";
 
 import React from 'react';
+import { ArrowRight } from 'lucide-react';
 import Reveal from './ui/Reveal';
 
-// Internal Data - You can edit these details later
-const TEAM = [
-  {
-    name: "LUKE MOD",
-    role: "FOUNDER / DIRECTORY",
-    bio: "Building the future of digital brutalism.",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    name: "SYSTEM_DEV",
-    role: "LEAD ENGINEER",
-    bio: "Optimized for maximum performance.",
-    img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop"
-  }
-];
+interface ArchitectCardProps {
+  name: string;
+  role: string;
+  bio: string;
+  img: string;
+  delay?: number;
+}
 
-export default function Architects() {
+export default function ArchitectCard({ name, role, bio, img, delay = 0 }: ArchitectCardProps) {
   return (
-    <section className="py-24 border-t border-neutral-800 bg-black text-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <Reveal>
-          <div className="flex flex-col md:flex-row justify-between items-baseline mb-16">
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase">
-              The_Architects
-            </h2>
-            <p className="font-mono text-neutral-500 mt-4 md:mt-0">
-              [ TEAM_SIZE: {TEAM.length} ]
+    // Ensure Reveal passes the h-full class through to its container
+    <Reveal delay={delay} className="h-full">
+      <div className="group relative border-b border-neutral-800 md:border-b-0 md:border-r last:border-r-0 min-h-[700px] flex flex-col h-full bg-neutral-950">
+        
+        {/* IMAGE SECTION: Using flex-grow (flex-[2]) instead of fixed percentage to handle resize better */}
+        <div className="relative w-full h-[400px] md:h-auto md:flex-[2] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out">
+          <img 
+            src={img} 
+            alt={name} 
+            className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-[1.5s]" 
+          />
+          <div className="absolute inset-0 bg-neutral-900/20 group-hover:bg-transparent transition-colors duration-500" />
+        </div>
+
+        {/* TEXT SECTION: md:flex-[1] ensures text area takes remaining space but allows image to dominate */}
+        <div className="p-8 flex flex-col justify-between md:flex-[1] bg-neutral-950">
+          <div>
+            <h3 className="text-4xl font-black tracking-tight mb-1 text-white">{name}</h3>
+            <p className="text-neutral-500 font-mono text-xs tracking-widest mb-6 border-l-2 border-neutral-700 pl-3 uppercase">
+              {role}
+            </p>
+            <p className="text-neutral-300 font-medium leading-relaxed max-w-md text-sm md:text-base">
+              {bio}
             </p>
           </div>
-        </Reveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {TEAM.map((member, i) => (
-            <Reveal key={i} delay={i * 100}>
-              <div className="group border border-neutral-800 bg-neutral-900/30 p-6 hover:border-[#ff00ff] transition-all duration-500">
-                
-                {/* Image Container */}
-                <div className="h-[400px] mb-6 overflow-hidden bg-neutral-900 relative">
-                    <img 
-                      src={member.img} 
-                      alt={member.name}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
-                    />
-                    {/* Scanline Overlay */}
-                    <div className="absolute inset-0 bg-black/20 bg-[linear-gradient(transparent_2px,rgba(0,0,0,0.3)_2px)] bg-[length:4px_4px] pointer-events-none" />
-                </div>
-                
-                {/* Text Info */}
-                <div className="flex justify-between items-end border-b border-neutral-800 pb-4 mb-4 group-hover:border-[#ff00ff] transition-colors">
-                  <h3 className="text-2xl font-black uppercase tracking-tighter">{member.name}</h3>
-                  <span className="font-mono text-xs text-[#ff00ff] tracking-widest bg-[#ff00ff]/10 px-2 py-1 rounded">
-                    {member.role}
-                  </span>
-                </div>
-                
-                <p className="font-mono text-sm text-neutral-400 max-w-md">
-                  // {member.bio}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+          <div className="mt-8">
+            <ArrowRight className="text-neutral-600 group-hover:text-white transition-colors duration-300" />
+          </div>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }
